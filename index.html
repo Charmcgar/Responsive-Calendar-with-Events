@@ -4,14 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Stay organized with our user-friendly Calendar featuring events, reminders, and a customizable interface. Built with HTML, CSS, and JavaScript. Start scheduling today!"
-    />
-    <meta
-      name="keywords"
-      content="calendar, events, reminders, javascript, html, css, open source coding"
-    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -20,7 +12,7 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="style.css" />
-    <title>Responsive Calendar</title>
+    <title>Responsive Calendar with Time Plotting</title>
   </head>
   <body>
     <div class="container">
@@ -28,7 +20,7 @@
         <div class="calendar">
           <div class="month">
             <i class="fas fa-angle-left prev"></i>
-            <div class="date">December 2015</div>
+            <div class="date">April 2025</div>
             <i class="fas fa-angle-right next"></i>
           </div>
           <div class="weekdays">
@@ -53,9 +45,15 @@
       <div class="right">
         <div class="today-date">
           <div class="event-day">Wed</div>
-          <div class="event-date">12th December 2022</div>
+          <div class="event-date">19th April 2025</div>
         </div>
-        <div class="events"></div>
+        <div class="events">
+          <h3>No Events</h3>
+        </div>
+        <div class="time-grid">
+          <h3>Time Schedule</h3>
+          <div class="time-slots"></div>
+        </div>
         <div class="add-event-wrapper">
           <div class="add-event-header">
             <div class="title">Add Event</div>
@@ -68,14 +66,14 @@
             <div class="add-event-input">
               <input
                 type="text"
-                placeholder="Event Time From"
+                placeholder="Event Time From (HH:mm)"
                 class="event-time-from"
               />
             </div>
             <div class="add-event-input">
               <input
                 type="text"
-                placeholder="Event Time To"
+                placeholder="Event Time To (HH:mm)"
                 class="event-time-to"
               />
             </div>
@@ -89,7 +87,6 @@
         <i class="fas fa-plus"></i>
       </button>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>
