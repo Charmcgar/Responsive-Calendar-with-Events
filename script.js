@@ -9,14 +9,9 @@ const calendar = document.querySelector(".calendar"),
   eventDay = document.querySelector(".event-day"),
   eventDate = document.querySelector(".event-date"),
   eventsContainer = document.querySelector(".events"),
-  addEventBtn = document.querySelector(".add-event"),
-  addEventWrapper = document.querySelector(".add-event-wrapper"),
-  addEventCloseBtn = document.querySelector(".close"),
-  addEventTitle = document.querySelector(".event-name"),
-  addEventFrom = document.querySelector(".event-time-from"),
-  addEventTo = document.querySelector(".event-time-to"),
-  addEventSubmit = document.querySelector(".add-event-btn"),
-  timeSlotsContainer = document.querySelector(".time-slots");
+  chatInput = document.querySelector(".chat-input"),
+  chatSubmit = document.querySelector(".chat-submit"),
+  chatLog = document.querySelector(".chat-log");
 
 let today = new Date();
 let activeDay;
@@ -100,26 +95,76 @@ function initCalendar() {
   addListener();
 }
 
-function updateTimeGrid(date) {
-  timeSlotsContainer.innerHTML = "";
-  for (let hour = 0; hour < 24; hour++) {
-    const timeSlot = document.createElement("div");
-    timeSlot.classList.add("time-slot");
-    const time = `${hour.toString().padStart(2, "0")}:00`;
-    const event = eventsArr.find(
-      (e) =>
-        e.day === date &&
-        e.month === month + 1 &&
-        e.year === year &&
-        e.events.some(
-          (ev) => ev.time.startsWith(time) || ev.time.includes(time)
-        )
-    );
-    timeSlot.innerHTML = `
-      <span>${time}</span>
-      <span class="event">${event ? event.events[0].title : ""}</span>`;
-    timeSlotsContainer.appendChild(timeSlot);
+// Chatbot functionality
+chatSubmit.addEventListener("click", async () => {
+  const userMessage = chatInput.value.trim();
+  if (!userMessage) return;
+
+  // Add user message to chat log
+  addMessageToChatLog("You", userMessage);
+  chatInput.value = "";
+
+  // Call OpenAI API
+  const response = await callOpenAIAPI(userMessage);
+
+  // Add AI response to chat log
+  addMessageToChatLog("AI", response);
+});
+
+function addMessageToChatLog(sender, message) {
+  const messageElement = document.createElement("div");
+  messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+  chatLog.appendChild(messageElement);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+// Function to call OpenAI API
+async function callOpenAIAPI(prompt) {
+  try {
+    const response = await fetch("https://api.openai.com/v1/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+      },
+      body: JSON.stringify({
+        model: "text-davinci-003",
+        prompt: `You are a helpful assistant for a calendar app. ${prompt}`,
+        max_tokens: 100,
+      }),
+    });
+
+    const data = await response.json();
+    const text = data.choices[0].text.trim();
+
+    // Parse response and add events if applicable
+    if (text.toLowerCase().includes("event added")) {
+      const [title, date, time] = parseEventDetails(prompt);
+      addEventToCalendar(title, date, time);
+    }
+
+    return text;
+  } catch (error) {
+    console.error("Error calling OpenAI API:", error);
+    return "Sorry, I couldn't process your request. Please try again.";
   }
 }
 
-// Call this function inside `updateEvents` to plot the time grid
+function parseEventDetails(prompt) {
+  // Example: Extract event details from user input
+  const title = prompt.match(/event\s"(.+?)"/i)?.[1] || "Untitled Event";
+  const date = prompt.match(/on\s(\d{1,2}\/\d{1,2}\/\d{4})/i)?.[1];
+  const time = prompt.match(/at\s(\d{1,2}:\d{2}(?:\s[APap][Mm])?)/i)?.[1];
+  return [title, date, time];
+}
+
+function addEventToCalendar(title, date, time) {
+  const [day, month, year] = date.split("/").map(Number);
+  eventsArr.push({
+    day,
+    month,
+    year,
+    events: [{ title, time }],
+  });
+  updateEvents(day);
+}
