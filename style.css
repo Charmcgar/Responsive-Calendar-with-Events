@@ -1,199 +1,37 @@
-:root {
-  --primary-clr: #b38add;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-body {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 30px;
-  background-color: #e2e1dc;
-}
-.container {
-  position: relative;
-  width: 1200px;
-  min-height: 850px;
-  margin: 0 auto;
-  padding: 5px;
-  color: #fff;
-  display: flex;
-
-  border-radius: 10px;
-  background-color: #373c4f;
-}
-.left {
-  width: 60%;
+.time-grid {
+  margin-top: 20px;
   padding: 20px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.calendar {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  color: #878895;
-  border-radius: 5px;
-  background-color: #fff;
-}
-.calendar .month {
-  width: 100%;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 50px;
+.time-grid h3 {
+  margin-bottom: 10px;
   font-size: 1.2rem;
-  font-weight: 500;
-  text-transform: capitalize;
+  color: #333;
 }
-.calendar .month .prev,
-.calendar .month .next {
-  cursor: pointer;
+.time-slots {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  row-gap: 10px;
 }
-.calendar .month .prev:hover,
-.calendar .month .next:hover {
-  color: var(--primary-clr);
-}
-.calendar .weekdays {
-  width: 100%;
-  height: 100px;
+.time-slot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  font-size: 1rem;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #333;
+}
+.time-slot span {
+  font-size: 0.9rem;
   font-weight: 500;
-  text-transform: capitalize;
 }
-.weekdays div {
-  width: 14.28%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.calendar .days {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 0 20px;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 20px;
-}
-.calendar .days .day {
-  width: 14.28%;
-  height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--primary-clr);
-  border: 1px solid #f5f5f5;
-}
-.calendar .days .day:not(.prev-date, .next-date):hover {
+.time-slot .event {
+  background: #007aff;
   color: #fff;
-  background-color: var(--primary-clr);
-}
-.calendar .days .prev-date,
-.calendar .days .next-date {
-  color: #b3b3b3;
-}
-.calendar .days .active {
-  position: relative;
-  font-size: 2rem;
-  color: #fff;
-  background-color: var(--primary-clr);
-}
-.calendar .goto-today {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 5px;
-  padding: 0 20px;
-  margin-bottom: 20px;
-  color: var(--primary-clr);
-}
-.calendar .goto-today .goto {
-  display: flex;
-  align-items: center;
-}
-.calendar .goto-today .goto input {
-  width: 100%;
-  height: 30px;
-  outline: none;
-  border: none;
-}
-.right {
-  width: 40%;
-  padding: 20px 0;
-}
-.right .today-date {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  margin-top: 50px;
-}
-.right .today-date .event-day {
-  font-size: 2rem;
-  font-weight: 500;
-}
-.right .today-date .event-date {
-  font-size: 1rem;
-  font-weight: 400;
-  color: #878895;
-}
-.events {
-  width: 100%;
-  height: 100%;
-  max-height: 600px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.events .event {
-  position: relative;
-  width: 95%;
-  min-height: 70px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  gap: 5px;
-  padding: 0 20px;
-}
-.add-event {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  color: #878895;
-  border: 2px solid #878895;
-  opacity: 0.5;
-  border-radius: 50%;
-  background-color: transparent;
-  cursor: pointer;
-}
-.add-event:hover {
-  opacity: 1;
+  padding: 2px 5px;
+  border-radius: 3px;
 }
