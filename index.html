@@ -12,7 +12,7 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="style.css" />
-    <title>Responsive Calendar with Time Plotting</title>
+    <title>Responsive Calendar with AI Chatbot</title>
   </head>
   <body>
     <div class="container">
@@ -50,42 +50,19 @@
         <div class="events">
           <h3>No Events</h3>
         </div>
-        <div class="time-grid">
-          <h3>Time Schedule</h3>
-          <div class="time-slots"></div>
-        </div>
-        <div class="add-event-wrapper">
-          <div class="add-event-header">
-            <div class="title">Add Event</div>
-            <i class="fas fa-times close"></i>
-          </div>
-          <div class="add-event-body">
-            <div class="add-event-input">
-              <input type="text" placeholder="Event Name" class="event-name" />
-            </div>
-            <div class="add-event-input">
-              <input
-                type="text"
-                placeholder="Event Time From (HH:mm)"
-                class="event-time-from"
-              />
-            </div>
-            <div class="add-event-input">
-              <input
-                type="text"
-                placeholder="Event Time To (HH:mm)"
-                class="event-time-to"
-              />
-            </div>
-          </div>
-          <div class="add-event-footer">
-            <button class="add-event-btn">Add Event</button>
+        <div class="chatbot">
+          <h3>AI Chatbot</h3>
+          <div class="chat-log"></div>
+          <div class="chat-input-wrapper">
+            <input
+              type="text"
+              class="chat-input"
+              placeholder="Ask me to add an event..."
+            />
+            <button class="chat-submit">Send</button>
           </div>
         </div>
       </div>
-      <button class="add-event">
-        <i class="fas fa-plus"></i>
-      </button>
     </div>
     <script src="script.js"></script>
   </body>
