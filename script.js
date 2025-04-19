@@ -95,19 +95,98 @@ function initCalendar() {
   addListener();
 }
 
+function updateEvents(date) {
+  let events = "";
+  eventsArr.forEach((event) => {
+    if (
+      date === event.day &&
+      month + 1 === event.month &&
+      year === event.year
+    ) {
+      event.events.forEach((event) => {
+        events += `<div class="event">
+            <div class="title">
+              <i class="fas fa-circle"></i>
+              <h3 class="event-title">${event.title}</h3>
+            </div>
+            <div class="event-time">
+              <span class="event-time">${event.time}</span>
+            </div>
+        </div>`;
+      });
+    }
+  });
+  if (events === "") {
+    events = `<div class="no-event">
+            <h3>No Events</h3>
+        </div>`;
+  }
+  eventsContainer.innerHTML = events;
+  saveEvents();
+}
+
+function addListener() {
+  const days = document.querySelectorAll(".day");
+  days.forEach((day) => {
+    day.addEventListener("click", (e) => {
+      getActiveDay(e.target.innerHTML);
+      updateEvents(Number(e.target.innerHTML));
+      activeDay = Number(e.target.innerHTML);
+      days.forEach((day) => {
+        day.classList.remove("active");
+      });
+      e.target.classList.add("active");
+    });
+  });
+}
+
+todayBtn.addEventListener("click", () => {
+  today = new Date();
+  month = today.getMonth();
+  year = today.getFullYear();
+  initCalendar();
+});
+
+gotoBtn.addEventListener("click", () => {
+  const dateArr = dateInput.value.split("/");
+  if (dateArr.length === 2) {
+    if (dateArr[0] > 0 && dateArr[0] < 13 && dateArr[1].length === 4) {
+      month = dateArr[0] - 1;
+      year = dateArr[1];
+      initCalendar();
+      return;
+    }
+  }
+  alert("Invalid Date");
+});
+
+function getActiveDay(date) {
+  const day = new Date(year, month, date);
+  const dayName = day.toString().split(" ")[0];
+  eventDay.innerHTML = dayName;
+  eventDate.innerHTML = date + " " + months[month] + " " + year;
+}
+
+function saveEvents() {
+  localStorage.setItem("events", JSON.stringify(eventsArr));
+}
+
+function getEvents() {
+  if (localStorage.getItem("events") === null) {
+    return;
+  }
+  eventsArr.push(...JSON.parse(localStorage.getItem("events")));
+}
+
 // Chatbot functionality
 chatSubmit.addEventListener("click", async () => {
   const userMessage = chatInput.value.trim();
   if (!userMessage) return;
 
-  // Add user message to chat log
   addMessageToChatLog("You", userMessage);
   chatInput.value = "";
 
-  // Call OpenAI API
   const response = await callOpenAIAPI(userMessage);
-
-  // Add AI response to chat log
   addMessageToChatLog("AI", response);
 });
 
@@ -118,18 +197,17 @@ function addMessageToChatLog(sender, message) {
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-// Function to call OpenAI API
 async function callOpenAIAPI(prompt) {
   try {
     const response = await fetch("https://api.openai.com/v1/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+        Authorization: `Bearer ${OpenAI_API}`,
       },
       body: JSON.stringify({
         model: "text-davinci-003",
-        prompt: `You are a helpful assistant for a calendar app. ${prompt}`,
+        prompt: `You are an assistant for a calendar app. Respond to this: ${prompt}`,
         max_tokens: 100,
       }),
     });
@@ -137,7 +215,6 @@ async function callOpenAIAPI(prompt) {
     const data = await response.json();
     const text = data.choices[0].text.trim();
 
-    // Parse response and add events if applicable
     if (text.toLowerCase().includes("event added")) {
       const [title, date, time] = parseEventDetails(prompt);
       addEventToCalendar(title, date, time);
@@ -151,7 +228,6 @@ async function callOpenAIAPI(prompt) {
 }
 
 function parseEventDetails(prompt) {
-  // Example: Extract event details from user input
   const title = prompt.match(/event\s"(.+?)"/i)?.[1] || "Untitled Event";
   const date = prompt.match(/on\s(\d{1,2}\/\d{1,2}\/\d{4})/i)?.[1];
   const time = prompt.match(/at\s(\d{1,2}:\d{2}(?:\s[APap][Mm])?)/i)?.[1];
@@ -168,3 +244,6 @@ function addEventToCalendar(title, date, time) {
   });
   updateEvents(day);
 }
+
+// Initialize the calendar
+initCalendar();
